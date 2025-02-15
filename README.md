@@ -7,3 +7,6 @@ SampleX is a Python script for downloading SampleFocus samples without the need 
 3. Press Enter.
 
 Your sample will be downloaded to the same directory where you are running the script.
+
+
+Note:This Script Was Made To Support Project #revivephonk
