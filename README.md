@@ -1,4 +1,9 @@
 # SampleX
-SampleX is a Python Script For Downlading SampleFocus Sample Without the need of Credits
-# How To Use
-Just Run The Script And Then It Will Ask You To Input The SampleFocus URL,Paste The Url And Click Enter...Done,Your Sample Will Be Downloaded To The Same Directory You Are In Or Using This Script From
+SampleX is a Python script for downloading SampleFocus samples without the need for Sample Credits.
+
+## How To Use
+1. Run the script.
+2. Input the SampleFocus URL when prompted.
+3. Press Enter.
+
+Your sample will be downloaded to the same directory where you are running the script.
