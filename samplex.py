@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def download_samplefocus_mp3(url):
     headers = {
@@ -28,7 +29,7 @@ def download_samplefocus_mp3(url):
                 if match := re.search(r'"(https?://[^"]+\.mp3)"', response.text):
                     mp3_url = match.group(1)
             if not mp3_url:
-                return "MP3 URL not found. Page structure may have changed."
+                return f"MP3 URL not found for {url}. Page structure may have changed."
             mp3_url = requests.compat.urljoin(url, mp3_url)
             mp3_response = session.get(mp3_url, headers=headers, stream=True)
             mp3_response.raise_for_status()
@@ -40,9 +41,25 @@ def download_samplefocus_mp3(url):
                     f.write(chunk)
             return f"Successfully downloaded: {filename}"
     except requests.RequestException as e:
-        return f"Network error: {str(e)}"
+        return f"Network error for {url}: {str(e)}"
     except Exception as e:
-        return f"Critical error: {str(e)}"
+        return f"Critical error for {url}: {str(e)}"
+
+def download_multiple(urls):
+    results = []
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        future_to_url = {executor.submit(download_samplefocus_mp3, url): url for url in urls}
+        for future in as_completed(future_to_url):
+            url = future_to_url[future]
+            try:
+                result = future.result()
+            except Exception as e:
+                result = f"Error downloading {url}: {str(e)}"
+            results.append(result)
+    return results
+
 if __name__ == "__main__":
-    url = input("Enter SampleFocus URL: ").strip()
-    print(download_samplefocus_mp3(url))
+    urls = input("Enter SampleFocus URLs (space separated): ").strip().split(' ')
+    results = download_multiple([url.strip() for url in urls])
+    for result in results:
+        print(result)
