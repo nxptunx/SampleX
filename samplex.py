@@ -59,7 +59,7 @@ def download_multiple(urls):
     return results
 
 if __name__ == "__main__":
-    urls = input("Enter SampleFocus URLs (space separated): ").strip().split(' ')
+    urls = input("Enter SampleFocus URL(s) [space separated]: ").strip().split(' ')
     results = download_multiple([url.strip() for url in urls])
     for result in results:
         print(result)
